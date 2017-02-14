@@ -11,16 +11,16 @@ class Api::SourcesController < ApiController
   end
 
   def crime_count
-    teamID = params[:teamID]
-    team_crime_count = "http://nflarrest.com/api/v1/team/topCrimes/#{TeamID}"
+    teamID = params[:teamID].rstrip
+    team_crime_count = "http://nflarrest.com/api/v1/team/topCrimes/#{teamID}"
     teamCrimeCount = HTTParty.get(team_crime_count)
-    binding.pry
+    team_crime_list = "http://nflarrest.com/api/v1/team/arrests/#{teamID}"
+    teamCrimeList = HTTParty.get(team_crime_list)
 
-    # currently working here 
-    # data_json = { allTeams: allTeams }
-    # respond_to do |format|
-    #   format.json { render json: data_json }
-    #   format.html
-    # end
+    data_json = { teamCrimeCount: teamCrimeCount, teamCrimeList: teamCrimeList }
+    respond_to do |format|
+      format.json { render json: data_json }
+      format.html
+    end
   end
 end

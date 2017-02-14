@@ -5,7 +5,6 @@ class App extends React.Component {
     super(props);
     this.state = {
       allTeams: [],
-
     };
     this.getAllTeams = this.getAllTeams.bind(this);
     this.getCrimeCounts = this.getCrimeCounts.bind(this);
@@ -29,29 +28,38 @@ class App extends React.Component {
   }
 
   getCrimeCounts() {
-    let teamNames = [];
-    this.state.allTeams.forEach(team => {
-      teamNames.push({teamCode: team.Team, teamName: team.Team_name})
-    })
-    this.state.allTeams.forEach(team => {
+    let updatedState = [];
+    const teamCodes = [...this.state.allTeams]
+    teamCodes.forEach(team => {
       let data = JSON.stringify({teamID: team.Team})
       $.ajax({
         url: '/api/sources/crime_count',
-        type: 'POST',
+        type: 'post',
         data: data,
         contentType: 'application/json'
       })
-      // currently working here on...
-      // getting a count of all crimes by category per team
-      // clone state and update as per Wes Bos example
-    })
+      .done(data => {
+        team["teamCrimeCount"] = data.teamCrimeCount
+        team["teamCrimeList"] = data.teamCrimeList
+        updatedState.push(team);
+      })
+    }, () => {
+      this.setState({ allTeams: updatedState });
+    });
+
+    // // let updatedState = [];
+    // const teamCodes = [...this.state.allTeams];
+    // teamCodes.forEach(team => {
+    //   const crimeCountPromise = fetch(`http://nflarrest.com/api/v1/team/topCrimes/${team.Team}`)
+    //   crimeCountPromise
+    //     .then(data => data.json())
+    //     .then(data => {
+    //       team['teamCrimeCount'] = data
+    //       // updatedState.push(team)
+    //     })
+    // })
+    // // why is this setting state despite using the spread operator?
   }
-
-  // crimeCountPerTeam
-  // http://nflarrest.com/api/v1/team/topCrimes/TeamID
-
-  // crimeListPerTeam
-  // http://nflarrest.com/api/v1/team/arrests/TeamID
 
   render() {
     return (
@@ -63,3 +71,22 @@ class App extends React.Component {
 };
 
 export default App;
+
+// // why doesn't this work?
+// let updatedState = [];
+// const teamCodes = [...this.state.allTeams];
+// teamCodes.forEach(team => {
+//   let data = JSON.stringify({teamID: team.Team})
+//   fetch('/api/sources/crime_count', {
+//     method: 'post',
+//     body: data
+//   })
+//   .then(response => response.json())
+//   .then(data => {
+//     team["teamCrimeCount"] = data.teamCrimeCount
+//     updatedState.push(team);
+//   }).catch(function(err) {
+//     console.log(err.message)
+//   })
+//   console.log(updatedState)
+// })
