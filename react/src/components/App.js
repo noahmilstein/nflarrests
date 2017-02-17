@@ -71,6 +71,10 @@ class App extends React.Component {
   // }
 
   render() {
+    // seed local DB with team info
+    // create rake task to update local DB with new API data
+    // implement D3
+
     // display team names (list > item)
       // under each team, display the crime categories (list > item) with count of crimes per category
     return (

@@ -3,6 +3,8 @@ class Api::SourcesController < ApiController
     teams = "http://nflarrest.com/api/v1/team"
     allTeams = HTTParty.get(teams)
 
+    binding.pry
+
     count = 1
     allTeams.map do |team|
       teamID = team['Team'].rstrip
