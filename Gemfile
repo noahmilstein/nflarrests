@@ -8,6 +8,7 @@ gem 'jquery-rails'
 gem 'listen'
 gem 'httparty'
 gem 'rb-readline'
+gem 'json'
 group :development, :test do
   gem 'capybara'
   gem 'factory_girl_rails'
