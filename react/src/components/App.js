@@ -40,22 +40,3 @@ class App extends React.Component {
 };
 
 export default App;
-
-// // why doesn't this work?
-// let updatedState = [];
-// const teamCodes = [...this.state.allTeams];
-// teamCodes.forEach(team => {
-//   let data = JSON.stringify({teamID: team.Team})
-//   fetch('/api/sources/crime_count', {
-//     method: 'post',
-//     body: data
-//   })
-//   .then(response => response.json())
-//   .then(data => {
-//     team["teamCrimeCount"] = data.teamCrimeCount
-//     updatedState.push(team);
-//   }).catch(function(err) {
-//     console.log(err.message)
-//   })
-//   console.log(updatedState)
-// })

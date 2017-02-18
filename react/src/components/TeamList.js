@@ -9,7 +9,6 @@ class TeamList extends React.Component {
   }
 
   render() {
-    debugger
     let teams = this.props.data.map(team => {
       return (
         <Team
@@ -18,6 +17,7 @@ class TeamList extends React.Component {
           teamCode={team.code}
           teamName={team.name}
           teamCity={team.city}
+          teamCrimes={team.crimes}
         />
       )
     })
