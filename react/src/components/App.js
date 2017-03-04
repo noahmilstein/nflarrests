@@ -7,7 +7,12 @@ class App extends React.Component {
     super(props);
     this.state = {
       allTeams: [],
-      allCategories: []
+      allCategories: [],
+      options: {
+        legend: {position:'top'},
+        bar: { groupWidth: '75%' },
+        isStacked: true
+      }
     };
     this.getInitialData = this.getInitialData.bind(this);
     this.formatData = this.formatData.bind(this);
@@ -61,60 +66,36 @@ class App extends React.Component {
       })
       team['teamCrimeCategorySum'] = teamCrimeCategorySum
     })
-    
-    // fix this block to get array of numbers to plug into the below return statement, replacing team.crimes.length
-    // sort team['teamCrimeCategorySum'] alphabetically before mapping
-    // teamList.map(team => {
-    //   const newArray = Object.keys(team['teamCrimeCategorySum'])
-    //     .sort()
-    //     .map(key => {
-    //       return team['teamCrimeCategorySum'][key]
-    //     })
-    // })
 
-    return [
-      [
-        'Crime Category',
-        categories.map(category => `${category.name}`),
-        {'role':'annotation'}
-      ],
-      teamList.map(team => {
+    const columns = teamList
+      .sort((a,b) => a.name > b.name ? 1 : -1)
+      .map(team => {
         const newArray = Object.keys(team['teamCrimeCategorySum'])
           .sort()
           .map(key => {
             return team['teamCrimeCategorySum'][key]
           })
-        return [`${team.name}`, ...newArray, '']
-      })
+        return [`${team.name}`, ...newArray, `${team.name}`]
+    }) 
+
+    return [
+      [
+        'Crime Category',
+        ...categories.map(category => `${category.name}`),
+        {'role':'annotation'}
+      ],
+      ...columns
     ]
   }
 
-// {
-//   "chartType":"ColumnChart",
-  // "data":[
-  //   [
-  //     "Genre",
-  //     "Fantasy & Sci Fi",
-  //     "Romance",
-  //     "Mystery/Crime",
-  //     "General",
-  //     "Western",
-  //     "Literature",
-  //     {"role":"annotation"}
-  //   ],
-  //   ["2010",10,24,20,32,18,5,""],
-  //   ["2020",16,22,23,30,16,9,""],
-  //   ["2030",28,19,29,30,12,13,""]
-  // ],
-
   render() {
-    // const dataArray = this.formatData()
-    // "options":{"legend":{"position":"top"},"bar":{"groupWidth":"75%"},"isStacked":true}
-    debugger
+    // clicking on category in legend returns error 
+      // `all series on a given axis must be of the same data type`
+    // attach event listeners 
     return (
       <div>
         <Chart
-          // options={{}}
+          options={this.state.options}
           chartType='ColumnChart'
           data={this.formatData()}
           graph_id=''
@@ -122,11 +103,10 @@ class App extends React.Component {
           height='500px'
           legend_toggle
         />
-        
-        Ahoj hoj
-        <TeamList
+
+        {/* <TeamList
           data={this.state.allTeams}
-        />
+        /> */}
       </div>
     );
   }
