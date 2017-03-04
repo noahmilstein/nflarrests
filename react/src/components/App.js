@@ -39,10 +39,6 @@ class App extends React.Component {
     const teamList = [...this.state.allTeams]
     const categories = this.state.allCategories
 
-    // const catArr = Array.from(categories, category => {
-    //   return category.name
-    // })
-
     teamList.forEach(team => {
       let teamCrimeCategoryList = [];
       team['crimes'].forEach(crime => {
@@ -64,17 +60,17 @@ class App extends React.Component {
         }
       })
       team['teamCrimeCategorySum'] = teamCrimeCategorySum
-      console.log(teamCrimeCategorySum)
     })
     
     // fix this block to get array of numbers to plug into the below return statement, replacing team.crimes.length
     // sort team['teamCrimeCategorySum'] alphabetically before mapping
-    teamList.map(team => {
-      const mustache = Object.keys(team['teamCrimeCategorySum']).map((key, index) => {
-        return team['teamCrimeCategorySum'][key]
-      })
-    })
-
+    // teamList.map(team => {
+    //   const newArray = Object.keys(team['teamCrimeCategorySum'])
+    //     .sort()
+    //     .map(key => {
+    //       return team['teamCrimeCategorySum'][key]
+    //     })
+    // })
 
     return [
       [
@@ -82,41 +78,51 @@ class App extends React.Component {
         categories.map(category => `${category.name}`),
         {'role':'annotation'}
       ],
-      teamList.map(team => [`${team.name}`,`${team.crimes.length}`,'']
-    )]
+      teamList.map(team => {
+        const newArray = Object.keys(team['teamCrimeCategorySum'])
+          .sort()
+          .map(key => {
+            return team['teamCrimeCategorySum'][key]
+          })
+        return [`${team.name}`, ...newArray, '']
+      })
+    ]
   }
 
 // {
 //   "chartType":"ColumnChart",
-//   "data":[
-//     [
-//       "Genre",
-//       "Fantasy & Sci Fi",
-//       "Romance",
-//       "Mystery/Crime",
-//       "General",
-//       "Western",
-//       "Literature",
-//       {"role":"annotation"}
-//     ],
-//     ["2010",10,24,20,32,18,5,""],
-//     ["2020",16,22,23,30,16,9,""],
-//     ["2030",28,19,29,30,12,13,""]
-//   ],
+  // "data":[
+  //   [
+  //     "Genre",
+  //     "Fantasy & Sci Fi",
+  //     "Romance",
+  //     "Mystery/Crime",
+  //     "General",
+  //     "Western",
+  //     "Literature",
+  //     {"role":"annotation"}
+  //   ],
+  //   ["2010",10,24,20,32,18,5,""],
+  //   ["2020",16,22,23,30,16,9,""],
+  //   ["2030",28,19,29,30,12,13,""]
+  // ],
 
   render() {
-
+    // const dataArray = this.formatData()
+    // "options":{"legend":{"position":"top"},"bar":{"groupWidth":"75%"},"isStacked":true}
+    debugger
     return (
       <div>
-        {/* <Chart
+        <Chart
+          // options={{}}
           chartType='ColumnChart'
-          data={this.formatData}
-          options={{}}
+          data={this.formatData()}
           graph_id=''
           width='100%'
           height='500px'
           legend_toggle
-        /> */}
+        />
+        
         Ahoj hoj
         <TeamList
           data={this.state.allTeams}
